@@ -1,0 +1,47 @@
+version: '2'
+services:
+  web:
+    image: python
+    environment:
+      APP_SETTINGS: spending.config.DevelopmentConfig
+      DATABASE_URL: postgresql://spending:UNgeingu0shahQu@postgres/spending
+    working_dir: /spending
+    restart: on-failure
+    volumes:
+      - .:/spending
+    command: python manager.py runserver
+    ports:
+      - 80:5000
+    networks:
+      - front-tier
+      - back-tier
+  db-manager:
+    image: python
+    environment:
+      APP_SETTINGS: spending.config.DevelopmentConfig
+      DATABASE_URL: postgresql://spending:UNgeingu0shahQu@postgres/spending
+    working_dir: /spending
+    volumes:
+      - .:/spending
+    command: python manager.py db upgrade
+    networks:
+      - back-tier
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: UNgeingu0shahQu
+      POSTGRES_USER: spending
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    networks:
+      - back-tier
+volumes:
+  postgres-data:
+    driver: local
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
