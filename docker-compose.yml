@@ -8,8 +8,12 @@ services:
       - front-tier
     links:
       - app
+    environment:
+      - DOCKER_TLS_VERIFY
+      - DOCKER_HOST
+      - DOCKER_CERT_PATH
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - $DOCKER_CERT_PATH:$DOCKER_CERT_PATH
   app:
     image: python
     environment:
