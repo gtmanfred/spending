@@ -1,6 +1,8 @@
+import os
+import socket
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import os
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -12,7 +14,7 @@ from .models import Receipts
 
 @app.route('/')
 def hello():
-    return "Hello World!"
+    return "Hello World from {0}!".format(socket.gethostname())
 
 if __name__ == '__main__':
     app.run('0.0.0.0')
